@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel" ref="panels">
     <h2>{{ chartsTitle }}</h2>
     <div class="chart" ref="charts"></div>
     <div class="panel-footer"></div>
@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { EleResize } from "../utils/esresize";
 export default {
   name: "Panel",
   data() {
@@ -610,6 +611,7 @@ export default {
   methods: {
     getEchartsData() {
       const charts = this.$echarts.init(this.$refs.charts);
+      // const resizeDiv = this.$refs.panels;
       switch (this.chart) {
         case "chart1":
           this.chartsTitle = "柱形图-就业行业";
@@ -637,10 +639,22 @@ export default {
           break;
       }
       // 让图表跟随屏幕自适应
-      window.onresize = function () {
+      // 第一种
+      // window.onresize = function () {
+      //   charts.resize();
+      //   // location.reload();
+      // };
+      // 第二种;
+      let sizeFun = function () {
         charts.resize();
-        location.reload();
       };
+      window.addEventListener("resize", sizeFun);
+      // 第三种
+      // let listener = function () {
+      //   console.log("resize");
+      //   charts.resize();
+      // };
+      // EleResize.on(resizeDiv, listener);
     },
   },
   mounted() {
